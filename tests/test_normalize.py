@@ -19,5 +19,11 @@ def test_collapses_internal_whitespace():
     assert normalize("як   є –   мине  ся") == "як є мине ся"
 
 
+def test_unifies_typographic_apostrophes():
+    # U+2019 right-single-quotation-mark and U+2018 left-single-quotation-mark
+    assert normalize("з’їв") == "з'їв"   # з'їв -> з'їв (apostrophe kept, NOT a space)
+    assert normalize("прислів’я") == "прислів'я"  # прислів'я -> прислів'я
+
+
 def test_preserves_dialectal_letters():
     assert normalize("Їжак ґедзь єдність і ліс") == "їжак ґедзь єдність і ліс"

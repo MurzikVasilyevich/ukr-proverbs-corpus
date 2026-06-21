@@ -3,7 +3,7 @@ from __future__ import annotations
 import re
 import unicodedata
 
-_APOSTROPHES = "'ʼ`´'"  # ' ʼ ` ´ '
+_APOSTROPHES = "’ʼ`´‘"  # ' ʼ ` ´ '  (right-single, modifier-letter, backtick, acute, left-single)
 _PUNCT = re.compile(r"[^\w'\s]", flags=re.UNICODE)  # keep word chars, ' and whitespace
 _WS = re.compile(r"\s+", flags=re.UNICODE)
 

@@ -35,8 +35,12 @@ python build.py      # regenerate corpus.csv + corpus.json
 python -m pytest     # run the test suite
 ```
 
+## Known limitations
+- `sources.csv` carries `Citationkey, Title, Year, Author` only — the upstream source files provide no BibTeX/Year/Author metadata, so BibTeX output (mentioned in the spec) is omitted for lack of source data; Year and Author were added by hand where known.
+- Variant groups are link-only (non-destructive): records are grouped by fuzzy similarity (rapidfuzz `token_set_ratio` ≥ 85) but never merged. At this threshold, transitive chaining can occasionally over-link distinct proverbs. Threshold tuning is deferred to the enrichment phase.
+
 ## Stats (last build)
 - Total entries: 35165
 - With explanation: 30605
-- Variant groups: 3440
+- Variant groups: 3431
 - Per source: Franko1901 30906, Mlodzynskyi2009 2261, Ilkevich1841 2702
