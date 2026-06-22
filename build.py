@@ -16,6 +16,10 @@ def build_records(sources_dir: str) -> list[CanonicalRecord]:
         os.path.join(sources_dir, "proverbs.csv"),
         os.path.join(sources_dir, "proverbs_sources.csv"),
     )
+    bobkova_path = os.path.join(sources_dir, "bobkova.csv")
+    if os.path.exists(bobkova_path):
+        from adapters import bobkova
+        records += bobkova.load(bobkova_path)
     for rec in records:
         rec.normalized_text = normalize(rec.text)
     records = merge_exact(records)
