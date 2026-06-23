@@ -36,7 +36,7 @@ Ukrainian paremiology lacked a single unified, machine-readable corpus that (a) 
 
 | Source | Entries | Notes |
 |---|---|---|
-| Franко 1901 — Іван Франко, *Галицько-руські народні приповідки* | 30,906 | Primary source; carries scholarly explanations |
+| Franko 1901 — Іван Франко, *Галицько-руські народні приповідки* | 30,906 | Primary source; carries scholarly explanations |
 | Номис 1864 — Матвій Номис, *Українські приказки, прислів'я і таке інше* | 9,785 | 1864 orthography preserved; best-effort OCR (~75–80%) |
 | Бобкова — В.І. Бобкова та ін. (упоряд.), *Українські народні прислів'я та приказки* | 5,613 | Modern Ukrainian; tesseract-OCR'd from PDF |
 | Ількевич 1841 — Григорій Ількевич, *Галицкіи приповѣдки и загадки* | 2,702 | Oldest collection (1841) |
