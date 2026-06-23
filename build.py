@@ -20,6 +20,10 @@ def build_records(sources_dir: str) -> list[CanonicalRecord]:
     if os.path.exists(bobkova_path):
         from adapters import bobkova
         records += bobkova.load(bobkova_path)
+    nomis_path = os.path.join(sources_dir, "nomis.csv")
+    if os.path.exists(nomis_path):
+        from adapters import nomis
+        records += nomis.load(nomis_path)
     for rec in records:
         rec.normalized_text = normalize(rec.text)
     records = merge_exact(records)

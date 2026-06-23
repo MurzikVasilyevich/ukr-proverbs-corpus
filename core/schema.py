@@ -6,6 +6,7 @@ SOURCE_PRIORITY: dict[str, int] = {
     "Franko1901": 0,
     "Mlodzynskyi2009": 1,
     "Ilkevich1841": 2,
+    "Nomis1864": 3,
 }
 
 
