@@ -16,17 +16,25 @@ let renderSeq = 0;
 
 const SOURCE_LABELS: Record<string, string> = {
   Franko1901: "Франко 1901",
+  Nomis1864: "Номис 1864",
   Bobkova: "Бобкова",
   Mlodzynskyi2009: "Млодзинський 2009",
   Ilkevich1841: "Ількевич 1841",
 };
-const SOURCE_ORDER = ["Franko1901", "Bobkova", "Mlodzynskyi2009", "Ilkevich1841"];
+const SOURCE_ORDER = ["Franko1901", "Nomis1864", "Bobkova", "Mlodzynskyi2009", "Ilkevich1841"];
 
 function esc(s: string): string {
   return s.replace(/[&<>"]/g, (c) => ({ "&": "&amp;", "<": "&lt;", ">": "&gt;", '"': "&quot;" }[c]!));
 }
 function fmt(n: number): string {
   return n.toLocaleString("uk-UA").replace(/[ ,\s]/g, " ");
+}
+// Ukrainian plural: forms = [one, few (2–4), many (0,5–20)]
+function plural(n: number, forms: [string, string, string]): string {
+  const m10 = n % 10, m100 = n % 100;
+  if (m10 === 1 && m100 !== 11) return forms[0];
+  if (m10 >= 2 && m10 <= 4 && (m100 < 12 || m100 > 14)) return forms[1];
+  return forms[2];
 }
 function catLabel(k: string): string { return meta.taxonomy[k] ?? k; }
 function srcLabel(k: string): string { return SOURCE_LABELS[k] ?? k; }
@@ -235,7 +243,9 @@ async function openDetail(p: Proverb) {
 
 function renderColophon() {
   $("colStat").textContent =
-    `${fmt(meta.count)} записів · ${meta.sources.length} джерела · ${Object.keys(meta.taxonomy).length} тем`;
+    `${fmt(meta.count)} ${plural(meta.count, ["запис", "записи", "записів"])} · ` +
+    `${meta.sources.length} ${plural(meta.sources.length, ["джерело", "джерела", "джерел"])} · ` +
+    `${Object.keys(meta.taxonomy).length} ${plural(Object.keys(meta.taxonomy).length, ["тема", "теми", "тем"])}`;
   $("colSources").innerHTML = meta.sources.map((s) =>
     `<li><b>${esc(s.author || s.key)}</b> — <i>${esc(s.title)}</i>${s.year ? ", " + esc(s.year) : ""}</li>`).join("");
 }
