@@ -42,7 +42,7 @@ npx vitest run          # API + search tests
 ```
 
 ## Contents
-- `corpus.csv` — canonical source-of-truth (35165 entries).
+- `corpus.csv` — canonical source-of-truth (48787 entries).
 - `corpus.json` — richer export (categories as arrays, per-source annotations).
 - `sources.csv` — source registry.
 - `enrich/taxonomy.csv` — the fixed 27-theme category vocabulary.
@@ -81,6 +81,7 @@ Regenerating them requires Claude Code. See `enrich/REPORT.md` for the coverage 
 - **Mlodzynskyi 2009** — *Практичний російсько-український словник приказок*.
 - **Ilkevich 1841** — Григорій Ількевич, *Галицкіи приповѣдки и загадки*.
 - **Bobkova** — В.І. Бобкова та ін. (упоряд.), *Українські народні прислів'я та приказки* (modern Ukrainian; full book, 5,613 proverbs, tesseract-OCR'd from the source PDF). Modern collection, so `modern_text` = `text`. See `expand/REPORT.md`.
+- **Nomis 1864** — Матвій Номис, *Українські приказки, прислів'я і таке інше* (1864; public-domain; 9,785 proverbs). The foundational 19th-c. collection, OCR'd (per-column crop + tesseract) from the scan and LLM-extracted from its critical apparatus. `text` preserves the original 1864 orthography; `modern_text` is the modernized form. **Best-effort (~75–80%):** OCR character errors persist in `text` and a small fraction may be LLM-normalized toward familiar forms (measured ~95%+ faithful-to-OCR; see `expand/REPORT.md`). The source PDF is not vendored (29 MB; re-fetchable — provenance in `expand/REPORT.md`).
 
 ## Rebuild
 ```bash
@@ -96,9 +97,9 @@ python -m pytest     # run the test suite
 - Categorization is best-effort, single-pass: a quality audit (n=40) found modern_text ~95% acceptable and category tags ~85% acceptable (~15% debatable/wrong, usually secondary tags or themes outside the 27-key vocabulary). The primary category tag is the most reliable.
 
 ## Stats (last build)
-- Total entries: 40444 (100% enriched; full Bobkova ingested)
-- With explanation: 30605
-- With modern_text: 40444
-- Variant groups (tuned): 3927 (634 span Bobkova + Franko)
-- Per source: Franko1901 30906, Bobkova 5613, Ilkevich1841 2702, Mlodzynskyi2009 2261
-- Top categories: emotion_mood, wisdom_folly, idiom_expressive, work_labor, social_relations
+- Total entries: 48787 (100% categorized; Nomis 1864 ingested)
+- With explanation: 30532
+- With modern_text: 48787
+- Variant groups: 5064 (2638 contain Nomis variants linked to other sources)
+- Per source: Franko1901 30906, Nomis1864 9785, Bobkova 5613, Ilkevich1841 2702, Mlodzynskyi2009 2261
+- Top categories: emotion_mood, idiom_expressive, wisdom_folly, work_labor, animals

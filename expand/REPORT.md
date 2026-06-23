@@ -57,3 +57,27 @@ dissolve > 8).
 
 - Phase 3b completes Bobkova. **Phase 3c** = archive.org sources (tesseract toolchain now in place).
 - Categories single-pass (primary tag reliable; secondary occasionally debatable, as SP2/3a).
+
+## Nomis 1864 ingestion (SP6)
+
+**Source:** Матвій Номис, *Українські приказки, прислів'я і таке інше* (1864), public-domain ~330-page scan
+(archive.org; "Ukraïns'ki prykazky, prysliv'ia i take inshe"). The PDF is **not vendored** (29 MB; re-fetchable).
+
+**Pipeline:** `pdftoppm` 300dpi → per-column crop (`expand/nomis_ocr.py`; the edition is two-column and whole-page
+OCR interleaves) → tesseract 5.5.2 `--psm 6` ukr (tessdata_best) → 330 page texts → batched **sonnet** LLM
+extraction (`expand/work/nomis_extract/`) pulling proverbs out of the 1864 critical apparatus, emitting
+`{text (original 1864 orthography), modern_text (modernized), ref}` → `data/sources/nomis.csv` (9,785, 18
+within-Nomis dupes dropped) → `expand/merge_nomis.py` (build + reattach enrichment by normalized_text +
+modern_text override) → `expand/{prep,finalize}_nomis.py` (haiku categorize of net-new + final write).
+
+**Merge result:** corpus 40,444 → **48,787** (+8,343 net-new). Of the 9,785 Nomis proverbs: 1,442 exact-merged
+into existing entries (added `Nomis1864` as a second attestation), 2,232 cross-source variant-linked to
+Franko/Bobkova/Ilkevich/Mlodzynskyi, 5,914 genuinely distinct. Net-new categorized (haiku, 27 themes).
+
+**Fidelity (best-effort ~75–80%):** an automated audit (n=400, `expand/audit_nomis.py`, extracted `text` vs OCR
+via rapidfuzz) found ~82% match the OCR at ≥80 and the low-scoring tail is dominated by *faithful* extractions
+penalized against noisy OCR references — true faithful-to-OCR is ~95%+. Two residual error classes: (1) OCR
+character errors persist in `text` (e.g. the scan's «коровая»/«5470» OCR'd as «коровай»/«5410»); (2) rare LLM
+normalization toward familiar forms (e.g. «кумові»→«тобі»), ~1–2%. `text` preserves archaic/dialectal forms
+(«вбувсь», «охвіра», «-цця») verbatim; modernization lives in `modern_text`. Nomis entries are flagged
+best-effort and identifiable by `Nomis1864` in `sources`.
