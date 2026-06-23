@@ -1,0 +1,24 @@
+import json, csv, os, xml.etree.ElementTree as ET
+from app.build_data import build
+
+TAX = "enrich/taxonomy.csv"
+SRC = "sources.csv"
+
+
+def test_build_outputs(tmp_path):
+    out = tmp_path / "data"; xml = tmp_path / "corpus.xml"
+    stats = build("tests/fixtures/productize_corpus.csv", TAX, SRC, str(out), str(xml))
+    prov = json.loads((out / "proverbs.json").read_text(encoding="utf-8"))
+    assert stats["count"] == 2
+    assert prov[0]["id"] == "p000001"
+    assert prov[0]["category"] == ["food_hunger", "animals"]
+    assert prov[0]["sources"] == ["Franko1901", "Bobkova"]
+    assert "modern_text" in prov[0] and "explanation" not in prov[0]
+    expl = json.loads((out / "explanations.json").read_text(encoding="utf-8"))
+    assert expl == {"p000001": "Сатира."}                # only non-empty
+    meta = json.loads((out / "meta.json").read_text(encoding="utf-8"))
+    assert meta["count"] == 2
+    assert meta["taxonomy"]["food_hunger"] == "Їжа і голод"
+    assert any(s["key"] == "Bobkova" for s in meta["sources"])
+    root = ET.fromstring(xml.read_text(encoding="utf-8"))
+    assert root.tag == "corpus" and len(root.findall("proverb")) == 2
