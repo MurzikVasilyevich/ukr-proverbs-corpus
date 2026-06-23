@@ -95,6 +95,7 @@ function openSwipe() {
 }
 function closeSwipe() {
   $("swipe").hidden = true; document.body.classList.remove("swipe-open");
+  $("swipeBtn").focus();
 }
 function advance(dir: 1 | -1) {
   const card = $("swipeCard");
@@ -115,7 +116,7 @@ function renderSwipeCard() {
      <p class="sw-text">${esc(p.text)}</p>
      ${differs(p) ? `<p class="sw-modern">${esc(p.modern_text)}</p>` : ""}
      <div class="sw-tags">${p.category.map((c) => `<span class="tag">${esc(catLabel(c))}</span>`).join("")}<span class="tag-src">${esc(p.sources.map(srcLabel).join(" · "))}</span></div>`;
-  inner.onclick = (e) => { if ((e.target as HTMLElement).closest(".sw-actions")) return; openDetail(p); };
+  inner.onclick = () => openDetail(p);
   $("swSave").setAttribute("aria-pressed", String(isSavedId(p.id)));
   $("swSave").classList.toggle("on", isSavedId(p.id));
 }
@@ -187,7 +188,7 @@ async function boot() {
   document.addEventListener("keydown", (e) => {
     if ($("swipe").hidden) return;
     if (e.key === "Escape") closeSwipe();
-    else if (e.key === "ArrowRight") { saveCurrent(); advance(1); }
+    else if (e.key === "ArrowRight") { saveCurrent(); renderSwipeCard(); advance(1); }
     else if (e.key === "ArrowLeft") advance(-1);
   });
   // touch / pointer drag
@@ -195,12 +196,13 @@ async function boot() {
   let sx = 0, dx = 0, dragging = false;
   card.addEventListener("pointerdown", (e) => { dragging = true; sx = e.clientX; dx = 0; card.style.transition = "none"; card.setPointerCapture(e.pointerId); });
   card.addEventListener("pointermove", (e) => { if (!dragging) return; dx = e.clientX - sx; card.style.transform = `translateX(${dx}px) rotate(${dx / 28}deg)`; });
+  card.addEventListener("pointercancel", () => { dragging = false; card.style.transform = ""; });
   card.addEventListener("pointerup", () => {
     if (!dragging) return; dragging = false;
     const threshold = card.offsetWidth * 0.25;
     if (dx > threshold) { saveCurrent(); advance(1); }
     else if (dx < -threshold) advance(-1);
-    else { card.style.transition = "transform .2s ease"; card.style.transform = ""; }
+    else { if (!reduceMotion) card.style.transition = "transform .2s ease"; card.style.transform = ""; }
   });
 
   if ("serviceWorker" in navigator) navigator.serviceWorker.register("/sw.js");
