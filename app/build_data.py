@@ -7,6 +7,15 @@ from collections import Counter
 from xml.sax.saxutils import escape
 
 
+def _read_version(corpus_path):
+    vpath = os.path.join(os.path.dirname(os.path.abspath(corpus_path)), "VERSION")
+    try:
+        with open(vpath, encoding="utf-8") as f:
+            return f.read().strip()
+    except FileNotFoundError:
+        return None
+
+
 def _load_taxonomy(path):
     with open(path, encoding="utf-8") as f:
         return {r["key"]: r["ukrainian_label"] for r in csv.DictReader(f)}
@@ -47,6 +56,7 @@ def build(corpus_path, taxonomy_path, sources_path, out_dir, xml_path):
         json.dump(explanations, f, ensure_ascii=False, separators=(",", ":"))
 
     meta = {
+        "version": _read_version(corpus_path),
         "count": len(proverbs),
         "with_explanation": len(explanations),
         "taxonomy": _load_taxonomy(taxonomy_path),
