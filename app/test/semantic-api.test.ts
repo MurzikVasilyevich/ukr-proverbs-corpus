@@ -24,6 +24,12 @@ describe("/api/semantic", () => {
   it("400 on missing q", async () => {
     expect((await call("/api/semantic", { query: async () => ({ matches: [] }) })).status).toBe(400);
   });
+  it("503 when AI or VECTORIZE binding absent", async () => {
+    const ctx = createExecutionContext();
+    const res = await worker.fetch(new Request("https://x/api/semantic?q=горе"), { ...env, ASSETS: env.ASSETS } as any, ctx);
+    await waitOnExecutionContext(ctx);
+    expect(res.status).toBe(503);
+  });
 });
 
 describe("/api/similar/:id", () => {

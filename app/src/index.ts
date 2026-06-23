@@ -12,7 +12,7 @@ interface Env {
 
 const SEMANTIC_MIN_SCORE = 0.4;
 
-let cache: Promise<{ proverbs: Proverb[]; explanations: Record<string, string>; meta: any }> | null = null;
+let cache: Promise<{ proverbs: Proverb[]; explanations: Record<string, string>; meta: any; byId: Map<string, Proverb> }> | null = null;
 
 function load(env: Env) {
   if (!cache) {
@@ -27,7 +27,7 @@ function load(env: Env) {
         get("/data/explanations.json") as Promise<Record<string, string>>,
         get("/data/meta.json") as Promise<any>,
       ]);
-      return { proverbs, explanations, meta };
+      return { proverbs, explanations, meta, byId: new Map(proverbs.map((p) => [p.id, p])) };
     })().catch((err) => { cache = null; throw err; });
   }
   return cache;
@@ -50,7 +50,7 @@ export default {
       const url = new URL(request.url);
       const path = url.pathname;
       if (!path.startsWith("/api/")) return env.ASSETS.fetch(request);
-      const { proverbs, explanations, meta } = await load(env);
+      const { proverbs, explanations, meta, byId } = await load(env);
       const qp = url.searchParams;
 
       if (path === "/api/search") {
@@ -82,13 +82,12 @@ export default {
         try {
           const { data } = await env.AI.run("@cf/baai/bge-m3", { text: [q] });
           const { matches } = await env.VECTORIZE.query(data[0], { topK: 100 });
-          const byId = new Map(proverbs.map((p) => [p.id, p]));
           const minScore = qp.get("minScore") ? Number(qp.get("minScore")) : SEMANTIC_MIN_SCORE;
           return J(mapMatches(matches, byId, {
             category: qp.get("category") ?? undefined,
             source: qp.get("source") ?? undefined,
             minScore: Number.isFinite(minScore) ? minScore : SEMANTIC_MIN_SCORE,
-            limit: qp.get("limit") ? Number(qp.get("limit")) : undefined,
+            limit: finiteOrUndef(Number(qp.get("limit"))),
           }));
         } catch {
           return J({ error: "semantic search failed" }, 502);
@@ -103,7 +102,6 @@ export default {
           if (!recs.length) return J({ error: "not indexed" }, 404);
           const lim = qp.get("limit") ? Number(qp.get("limit")) : 6;
           const { matches } = await env.VECTORIZE.query(recs[0].values, { topK: Math.min((Number.isFinite(lim) ? lim : 6) + 1, 100) });
-          const byId = new Map(proverbs.map((p) => [p.id, p]));
           return J(mapMatches(matches, byId, { excludeId: id, limit: Number.isFinite(lim) ? lim : 6 }));
         } catch {
           return J({ error: "similar lookup failed" }, 502);
