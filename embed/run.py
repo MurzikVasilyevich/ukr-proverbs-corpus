@@ -43,13 +43,13 @@ def _wrangler_upsert(items):
     path = os.path.join(tempfile.gettempdir(), "vectorize-upsert.ndjson")
     with open(path, "w", encoding="utf-8") as f:
         f.write(ndjson + "\n")
-    subprocess.run(["npx", "wrangler", "vectorize", "upsert", "proverbs-bge-m3", "--file", path],
+    subprocess.run(["npx", "wrangler", "vectorize", "upsert", "proverbs-bge-m3-v2", "--file", path],
                    cwd="app", check=True)
 
 
 def _wrangler_delete(ids):
     import subprocess
-    subprocess.run(["npx", "wrangler", "vectorize", "delete-vectors", "proverbs-bge-m3", "--ids", *ids],
+    subprocess.run(["npx", "wrangler", "vectorize", "delete-vectors", "proverbs-bge-m3-v2", "--ids", *ids],
                    cwd="app", check=True)
 
 
