@@ -1,5 +1,6 @@
 import csv
 import os
+import tempfile
 
 from embed.compose import compose_embed_text, content_hash
 from embed.manifest import load_manifest, save_manifest, diff
@@ -39,10 +40,10 @@ def _wrangler_upsert(items):
     import json
     import subprocess
     ndjson = "\n".join(json.dumps(it, ensure_ascii=False) for it in items)
-    path = "/tmp/vectorize-upsert.ndjson"
+    path = os.path.join(tempfile.gettempdir(), "vectorize-upsert.ndjson")
     with open(path, "w", encoding="utf-8") as f:
         f.write(ndjson + "\n")
-    subprocess.run(["npx", "wrangler", "vectorize", "insert", "proverbs-bge-m3", "--file", path],
+    subprocess.run(["npx", "wrangler", "vectorize", "upsert", "proverbs-bge-m3", "--file", path],
                    cwd="app", check=True)
 
 

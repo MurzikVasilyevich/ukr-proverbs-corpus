@@ -76,3 +76,74 @@ No errors. `public/app.js` is gitignored and not committed.
 ## Concerns
 
 None. All 5 fixes applied cleanly. The `?limit=` (empty string) edge now passes `0` instead of `undefined` (previously the truthy guard returned `undefined`); `searchProverbs` clamps it to `1`, which is safe. This is a minor behaviour difference from the old code but is not a regression — the old truthy check `qp.get("limit") ? Number(...) : undefined` treated `?limit=0` as falsy and returned `undefined` (default 50), which was arguably wrong too.
+
+---
+
+# SP5 Semantic Search — Final Code Review Fixes (2026-06-23)
+
+Branch: `feat/semantic-search`  
+Files modified: `embed/run.py`, `app/src/client/main.ts`
+
+---
+
+## Fix 1 (CRITICAL) — vectorize `insert` → `upsert`
+
+**File:** `embed/run.py`, `_wrangler_upsert()`
+
+Changed subprocess command from `"insert"` to `"upsert"`. `wrangler vectorize insert` keeps the FIRST vector for an id and silently ignores re-writes; `upsert` correctly overwrites, matching the intent of `to_upsert` in the pipeline.
+
+## Fix 2 (Minor) — tempfile path
+
+**File:** `embed/run.py`
+
+Added `import tempfile` at the top. Replaced hardcoded `"/tmp/vectorize-upsert.ndjson"` with `os.path.join(tempfile.gettempdir(), "vectorize-upsert.ndjson")` for cross-platform compatibility.
+
+## Fix 3 (Minor) — escape `data-id` in client
+
+**File:** `app/src/client/main.ts`
+
+- In `paintEntries`: `data-id="${p.id}"` → `data-id="${esc(p.id)}"`
+- In `openDetail` similar section: `data-id="${s.id}"` → `data-id="${esc(s.id)}"`
+
+Consistent with the rest of the escaped render path.
+
+## Fix 4 (Minor) — guard async render race
+
+**File:** `app/src/client/main.ts`
+
+- Added module-scope `let renderSeq = 0;` near other `let` state.
+- At top of `renderResults`: `const seq = ++renderSeq;`
+- In the semantic branch, after `await fetch(...).then(r=>r.json())` resolves and before touching the DOM: `if (seq !== renderSeq) return;`
+
+Superseded in-flight `/api/semantic` responses are now dropped instead of painting stale results.
+
+---
+
+## pytest output
+
+```
+.................................................................        [100%]
+65 passed in 0.60s
+```
+
+## build output
+
+```
+Built public/app.js
+```
+
+No esbuild errors.
+
+## vitest output
+
+```
+ ✓ test/semantic.test.ts (4 tests) 52ms
+ ✓ test/corpus.test.ts (5 tests) 75ms
+ ✓ test/api.test.ts (5 tests) 66ms
+ ✓ test/semantic-api.test.ts (5 tests) 71ms
+
+ Test Files  4 passed (4)
+      Tests  19 passed (19)
+```
+
+All 19 tests passed.

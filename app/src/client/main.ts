@@ -12,6 +12,7 @@ let explCache: Record<string, string> | null = null;
 let activeCat = "";
 let activeSource = "";
 let semanticMode = false;
+let renderSeq = 0;
 
 const SOURCE_LABELS: Record<string, string> = {
   Franko1901: "Франко 1901",
@@ -126,6 +127,7 @@ function renderFilters() {
 }
 
 async function renderResults() {
+  const seq = ++renderSeq;
   const q = ($("q") as HTMLInputElement).value.trim();
 
   if (semanticMode && q) {
@@ -134,6 +136,7 @@ async function renderResults() {
       const url = `/api/semantic?q=${encodeURIComponent(q)}` +
         (activeCat ? `&category=${activeCat}` : "") + (activeSource ? `&source=${activeSource}` : "") + "&limit=80";
       const data = await fetch(url).then((r) => r.json());
+      if (seq !== renderSeq) return;
       $("count").textContent = `За змістом: ${fmt(data.total)}`;
       paintEntries(data.results, "За змістом", true);
     } catch {
@@ -168,7 +171,7 @@ function paintEntries(results: Array<Proverb & { score?: number }>, head: string
   $("results").innerHTML =
     `<p class="results-head">${head}</p>` +
     results.map((p) =>
-      `<article class="entry" data-id="${p.id}">
+      `<article class="entry" data-id="${esc(p.id)}">
         <div class="entry-cat">№&nbsp;${esc(p.id.replace(/^p0*/, ""))}${showScore && p.score !== undefined ? `<br><span class="entry-score">${p.score.toFixed(2)}</span>` : ""}</div>
         <div>
           <div class="entry-text">${esc(p.text)}</div>
@@ -219,7 +222,7 @@ async function openDetail(p: Proverb) {
       if (!form) return;
       const sec = document.createElement("div");
       sec.className = "detail-similar";
-      sec.innerHTML = `<h4>Схожі прислів'я</h4><ul>${data.results.map((s: Proverb) => `<li data-id="${s.id}">${esc(s.text)}</li>`).join("")}</ul>`;
+      sec.innerHTML = `<h4>Схожі прислів'я</h4><ul>${data.results.map((s: Proverb) => `<li data-id="${esc(s.id)}">${esc(s.text)}</li>`).join("")}</ul>`;
       form.insertBefore(sec, form.querySelector(".detail-close"));
       for (const li of Array.from(sec.querySelectorAll<HTMLElement>("li"))) {
         li.addEventListener("click", () => { const sp = all.find((x) => x.id === li.dataset.id); if (sp) { dlg.close(); openDetail(sp); } });
