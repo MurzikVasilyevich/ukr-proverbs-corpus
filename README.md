@@ -8,7 +8,7 @@ It is **enriched**: every entry carries a modern-spelling rendering and 1–3 th
 ## Web app & API
 
 A Cloudflare Worker serves a searchable, offline-capable PWA and a JSON REST API over the corpus
-(in `app/`, mirroring the ua-bez-tabu stack). Live URL: _(added after deploy)_.
+(in `app/`, mirroring the ua-bez-tabu stack). Live: **https://ukr-proverbs-corpus.miwaniza.workers.dev**
 
 REST API:
 - `GET /api/search?q=&category=&source=&limit=&offset=` → `{total, results}`
