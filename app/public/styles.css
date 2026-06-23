@@ -1,0 +1,13 @@
+:root { font-family: system-ui, sans-serif; }
+body { margin: 0; color: #1a1a1a; }
+header { position: sticky; top: 0; background: #fff; padding: 1rem; border-bottom: 1px solid #ddd; }
+h1 { font-size: 1.2rem; margin: 0 0 .5rem; }
+#q { width: 100%; padding: .6rem; font-size: 1rem; box-sizing: border-box; }
+#filters { display: flex; flex-wrap: wrap; gap: .3rem; margin: .5rem 0; }
+.chip { font-size: .8rem; padding: .2rem .5rem; border: 1px solid #ccc; border-radius: 1rem; cursor: pointer; background: #f6f6f6; }
+.chip.active { background: #2563eb; color: #fff; border-color: #2563eb; }
+#results { padding: 1rem; display: grid; gap: .5rem; max-width: 800px; margin: 0 auto; }
+.card { padding: .7rem; border: 1px solid #eee; border-radius: .4rem; cursor: pointer; }
+.card .modern { color: #555; font-size: .9rem; }
+.badge { font-size: .7rem; background: #eef; border-radius: .3rem; padding: 0 .3rem; margin-right: .2rem; }
+dialog { max-width: 600px; }
