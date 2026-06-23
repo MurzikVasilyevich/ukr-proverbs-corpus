@@ -5,6 +5,28 @@ unified from digitized historical sources.
 
 It is **enriched**: every entry carries a modern-spelling rendering and 1–3 thematic categories.
 
+## Web app & API
+
+A Cloudflare Worker serves a searchable, offline-capable PWA and a JSON REST API over the corpus
+(in `app/`, mirroring the ua-bez-tabu stack). Live URL: _(added after deploy)_.
+
+REST API:
+- `GET /api/search?q=&category=&source=&limit=&offset=` → `{total, results}`
+- `GET /api/proverb/:id` → proverb + explanation
+- `GET /api/random?category=&source=` → one random proverb
+- `GET /api/categories` → 27 themes with counts
+- `GET /api/meta` → corpus metadata
+
+Run locally:
+```bash
+cd app
+npm install
+.venv/bin/python build_data.py ../corpus.csv ../enrich/taxonomy.csv ../sources.csv public/data ../corpus.xml
+node build.mjs
+npx wrangler dev        # http://127.0.0.1:8787
+npx vitest run          # API + search tests
+```
+
 ## Contents
 - `corpus.csv` — canonical source-of-truth (35165 entries).
 - `corpus.json` — richer export (categories as arrays, per-source annotations).
