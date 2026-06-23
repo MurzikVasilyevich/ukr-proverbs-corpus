@@ -1,0 +1,21 @@
+{
+  "name": "ukr-proverbs-corpus-app",
+  "version": "1.0.0",
+  "private": true,
+  "type": "module",
+  "scripts": {
+    "sync-data": ".venv/bin/python build_data.py ../corpus.csv ../enrich/taxonomy.csv ../sources.csv public/data ../corpus.xml",
+    "build": "node build.mjs",
+    "dev": "wrangler dev",
+    "deploy": "wrangler deploy",
+    "test": "vitest run"
+  },
+  "dependencies": { "minisearch": "^7.1.0" },
+  "devDependencies": {
+    "@cloudflare/vitest-pool-workers": "^0.9.6",
+    "esbuild": "^0.25.10",
+    "typescript": "^5.9.3",
+    "vitest": "~3.2.4",
+    "wrangler": "^4.103.0"
+  }
+}
