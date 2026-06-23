@@ -6,7 +6,7 @@ const $ = <T extends HTMLElement = HTMLElement>(id: string) => document.getEleme
 
 let all: Proverb[] = [];
 let byId = new Map<string, Proverb>();
-let meta: { count: number; taxonomy: Record<string, string>; sources: Array<{ key: string; title: string; year: string; author: string }> };
+let meta: { version?: string; count: number; taxonomy: Record<string, string>; sources: Array<{ key: string; title: string; year: string; author: string }> };
 let mini: MiniSearch<Proverb>;
 let presentable: Proverb[] = [];
 let landingSample: Proverb[] = [];
@@ -392,6 +392,10 @@ function renderColophon() {
     `${fmt(meta.count)} ${plural(meta.count, ["запис", "записи", "записів"])} · ` +
     `${meta.sources.length} ${plural(meta.sources.length, ["джерело", "джерела", "джерел"])} · ` +
     `${Object.keys(meta.taxonomy).length} ${plural(Object.keys(meta.taxonomy).length, ["тема", "теми", "тем"])}`;
+  if (meta.version) {
+    $("colVersion").innerHTML =
+      `Версія даних <a href="https://github.com/MurzikVasilyevich/verbacorpus/releases/tag/v${esc(meta.version)}" rel="noopener">v${esc(meta.version)}</a>`;
+  }
   $("colSources").innerHTML = meta.sources.map((s) =>
     `<li><b>${esc(s.author || s.key)}</b> — <i>${esc(s.title)}</i>${s.year ? ", " + esc(s.year) : ""}</li>`).join("");
 }
