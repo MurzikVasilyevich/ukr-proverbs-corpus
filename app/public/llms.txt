@@ -1,0 +1,47 @@
+# Ukrainian Proverbs Corpus (Українські прислів'я та приказки)
+
+> An open, deduplicated, source-attributed corpus of 48,787 Ukrainian proverbs and adages
+> (прислів'я та приказки), unified from five digitized collections spanning 1841 to the present.
+> Each entry carries a modern-spelling rendering and 1–3 thematic categories; ~30,500 include scholarly
+> explanations. Free and public, with a searchable web app and a multi-format REST API.
+
+Base URL: https://ukr-proverbs-corpus.miwaniza.workers.dev
+
+## What it is
+
+- 48,787 proverbs; 27 fixed thematic categories; soft-deduplicated, with cross-source variant links (never destructively merged).
+- Per-proverb fields: `id`, `text` (original orthography), `modern_text` (modern spelling), `category[]`, `sources[]`, `variant_group`, `explanation`.
+- Sources: Франко 1901 (30,906) · Номис 1864 (9,785) · Бобкова (5,613) · Ількевич 1841 (2,702) · Млодзинський 2009 (2,261).
+- Quality: 19th-century sources are public domain; the Номис 1864 entries are best-effort OCR + LLM extraction (~75–80%, flagged via the `Nomis1864` source and documented). `modern_text` and `category` are LLM-generated.
+
+## REST API
+
+Every data endpoint supports `?format=json|jsonl|xml|csv|tsv` (default `json`) or the `Accept` header.
+
+- `GET /api/v1/search?q=&category=&source=&limit=&offset=` — lexical (substring) search
+- `GET /api/v1/semantic?q=&category=&source=&minScore=&limit=` — meaning-based search (embeddings)
+- `GET /api/v1/random?n=&category=&source=` — N random proverbs
+- `GET /api/v1/query?category=&source=&variant_group=&has_explanation=&limit=&offset=` — flexible filter
+- `GET /api/v1/proverb/{id}` — a single proverb, including its explanation
+- `GET /api/v1/export?category=&source=` — the whole corpus (or filtered), including explanations
+- `GET /api/v1/categories` — the 27 themes with counts
+- `GET /api/v1/meta` — corpus metadata
+
+Collections return `{total, limit, offset, results}`; CORS is open (`Access-Control-Allow-Origin: *`).
+
+## Docs
+
+- OpenAPI 3 spec: https://ukr-proverbs-corpus.miwaniza.workers.dev/api/v1/openapi.json
+- Human docs + curl examples: https://ukr-proverbs-corpus.miwaniza.workers.dev/api.html
+- Source code & data: https://github.com/MurzikVasilyevich/ukr-proverbs-corpus
+
+## Examples
+
+- `curl 'https://ukr-proverbs-corpus.miwaniza.workers.dev/api/v1/search?q=гроші&format=json'`
+- `curl 'https://ukr-proverbs-corpus.miwaniza.workers.dev/api/v1/random?n=1'`
+- `curl 'https://ukr-proverbs-corpus.miwaniza.workers.dev/api/v1/export?format=jsonl'`
+
+## Notes
+
+- Proverbs are in Ukrainian; field names and this file are in English.
+- Licensing: historical sources (1841–1909) are public domain; modern collections (Млодзинський 2009, Бобкова) may carry rights — attribute per each entry's `sources`.
