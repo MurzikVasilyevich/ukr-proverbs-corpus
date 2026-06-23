@@ -48,6 +48,7 @@
       <input id="q" type="search" placeholder="Шукати прислів'я або слово…" autocomplete="off" spellcheck="false" />
       <button id="semToggle" class="sem-toggle" type="button" role="switch" aria-checked="false" title="Пошук за змістом (потрібен інтернет)">за змістом</button>
       <button id="savedBtn" class="saved-btn" type="button">♥ Збережені (0)</button>
+      <button id="swipeBtn" class="swipe-btn" type="button">Гортати ⇆</button>
       <span id="count" class="count" aria-live="polite"></span>
     </div>
     <div class="filters">
@@ -76,6 +77,16 @@
     </div>
   </footer>
 
+  <div id="swipe" class="swipe" role="dialog" aria-modal="true" aria-label="Гортати прислів'я" hidden>
+    <button id="swipeClose" class="sw-close" type="button" aria-label="Закрити">✕</button>
+    <div id="swipeCard" class="sw-card"></div>
+    <div class="sw-actions">
+      <button id="swSkip" class="sw-act sw-skip" type="button" aria-label="Пропустити">✕</button>
+      <button id="swShare" class="sw-act sw-share" type="button" aria-label="Поділитися">↗</button>
+      <button id="swSave" class="sw-act sw-savebtn" type="button" aria-label="Зберегти" aria-pressed="false">♥</button>
+    </div>
+    <p class="sw-hint">Гортайте, або ← пропустити · зберегти →</p>
+  </div>
   <dialog id="detail" class="detail" aria-label="Прислів'я"></dialog>
   <script type="module" src="/app.js"></script>
 </body>

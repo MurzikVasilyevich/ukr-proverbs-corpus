@@ -59,6 +59,67 @@ function debounce(fn: () => void, ms: number) {
   return () => { clearTimeout(t); t = setTimeout(fn, ms) as unknown as number; };
 }
 
+async function share(p: Proverb) {
+  const url = location.origin;
+  if (navigator.share) { try { await navigator.share({ title: "Українське прислів'я", text: p.text, url }); } catch {} return; }
+  try { await navigator.clipboard.writeText(`${p.text} — ${url}`); flash("Скопійовано ✓"); }
+  catch { window.open(url, "_blank"); }
+}
+let flashT: number;
+function flash(msg: string) {
+  let el = $("flash"); if (!el) { el = document.createElement("div"); el.id = "flash"; el.className = "flash"; document.body.appendChild(el); }
+  el.textContent = msg; el.classList.add("show"); clearTimeout(flashT);
+  flashT = setTimeout(() => el!.classList.remove("show"), 1400) as unknown as number;
+}
+
+let deck: Proverb[] = [];
+let deckI = 0;
+const reduceMotion = matchMedia("(prefers-reduced-motion: reduce)").matches;
+
+function buildDeck(): Proverb[] {
+  const q = ($("q") as HTMLInputElement).value.trim();
+  const filtering = !!(q || activeCat || activeSource) && !savedView;
+  const base = savedView ? (saved.map((id) => byId.get(id)).filter(Boolean) as Proverb[])
+    : filtering ? pageResults : presentable;
+  const pool = base.length ? base : presentable;
+  return sample(pool, pool.length); // shuffle all
+}
+
+function openSwipe() {
+  deck = buildDeck(); deckI = 0;
+  if (!deck.length) return;
+  document.body.classList.add("swipe-open");
+  const ov = $("swipe"); ov.hidden = false;
+  renderSwipeCard();
+  $("swipeClose").focus();
+}
+function closeSwipe() {
+  $("swipe").hidden = true; document.body.classList.remove("swipe-open");
+}
+function advance(dir: 1 | -1) {
+  const card = $("swipeCard");
+  const done = () => { deckI++; if (deck.length - deckI < 5) { deck = deck.concat(buildDeck()); } renderSwipeCard(); };
+  if (reduceMotion) { done(); return; }
+  card.style.transition = "transform .28s ease, opacity .28s ease";
+  card.style.transform = `translateX(${dir * 120}%) rotate(${dir * 12}deg)`;
+  card.style.opacity = "0";
+  setTimeout(() => { card.style.transition = "none"; card.style.transform = ""; card.style.opacity = "1"; done(); }, 280);
+}
+function saveCurrent() { const p = deck[deckI]; if (p && !isSavedId(p.id)) setSaved(p.id); }
+
+function renderSwipeCard() {
+  const p = deck[deckI]; if (!p) { closeSwipe(); return; }
+  const inner = $("swipeCard");
+  inner.innerHTML =
+    `<div class="sw-cat">№&nbsp;${esc(p.id.replace(/^p0*/, ""))}</div>
+     <p class="sw-text">${esc(p.text)}</p>
+     ${differs(p) ? `<p class="sw-modern">${esc(p.modern_text)}</p>` : ""}
+     <div class="sw-tags">${p.category.map((c) => `<span class="tag">${esc(catLabel(c))}</span>`).join("")}<span class="tag-src">${esc(p.sources.map(srcLabel).join(" · "))}</span></div>`;
+  inner.onclick = (e) => { if ((e.target as HTMLElement).closest(".sw-actions")) return; openDetail(p); };
+  $("swSave").setAttribute("aria-pressed", String(isSavedId(p.id)));
+  $("swSave").classList.toggle("on", isSavedId(p.id));
+}
+
 function loadSaved(): string[] {
   try { const v = JSON.parse(localStorage.getItem("verba:saved") || "[]"); return Array.isArray(v) ? v : []; } catch { return []; }
 }
@@ -116,6 +177,30 @@ async function boot() {
     savedView = !savedView;
     $("savedBtn").classList.toggle("active", savedView);
     if (savedView) renderSavedView(); else renderResults();
+  });
+
+  $("swipeBtn").addEventListener("click", openSwipe);
+  $("swipeClose").addEventListener("click", closeSwipe);
+  $("swSkip").addEventListener("click", () => advance(-1));
+  $("swSave").addEventListener("click", () => { saveCurrent(); renderSwipeCard(); advance(1); });
+  $("swShare").addEventListener("click", () => { const p = deck[deckI]; if (p) share(p); });
+  document.addEventListener("keydown", (e) => {
+    if ($("swipe").hidden) return;
+    if (e.key === "Escape") closeSwipe();
+    else if (e.key === "ArrowRight") { saveCurrent(); advance(1); }
+    else if (e.key === "ArrowLeft") advance(-1);
+  });
+  // touch / pointer drag
+  const card = $("swipeCard");
+  let sx = 0, dx = 0, dragging = false;
+  card.addEventListener("pointerdown", (e) => { dragging = true; sx = e.clientX; dx = 0; card.style.transition = "none"; card.setPointerCapture(e.pointerId); });
+  card.addEventListener("pointermove", (e) => { if (!dragging) return; dx = e.clientX - sx; card.style.transform = `translateX(${dx}px) rotate(${dx / 28}deg)`; });
+  card.addEventListener("pointerup", () => {
+    if (!dragging) return; dragging = false;
+    const threshold = card.offsetWidth * 0.25;
+    if (dx > threshold) { saveCurrent(); advance(1); }
+    else if (dx < -threshold) advance(-1);
+    else { card.style.transition = "transform .2s ease"; card.style.transform = ""; }
   });
 
   if ("serviceWorker" in navigator) navigator.serviceWorker.register("/sw.js");
@@ -265,6 +350,7 @@ async function openDetail(p: Proverb) {
       ${expl ? `<div class="detail-expl">${esc(expl)}</div>` : ""}
       ${variants.length ? `<div class="detail-variants"><h4>Варіанти</h4><ul>${variants.map((v) => `<li>${esc(v.text)}</li>`).join("")}</ul></div>` : ""}
       <div class="detail-meta">${p.category.map((c) => `<span class="tag">${esc(catLabel(c))}</span>`).join("")}<span>${cite}</span></div>
+      <div class="detail-share"><button class="detail-sharebtn" type="button">Поділитися</button></div>
       <button class="detail-close" type="submit" value="close">Закрити</button>
     </form>`;
 
@@ -283,6 +369,8 @@ async function openDetail(p: Proverb) {
     }).catch(() => {});
   }
 
+  const sb = dlg.querySelector<HTMLButtonElement>(".detail-sharebtn");
+  if (sb) sb.addEventListener("click", () => share(p));
   dlg.showModal();
 }
 
