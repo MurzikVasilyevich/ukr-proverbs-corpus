@@ -15,6 +15,8 @@ let activeCat = "";
 let activeSource = "";
 let semanticMode = false;
 let renderSeq = 0;
+let saved: string[] = loadSaved();
+let savedView = false;
 
 const SOURCE_LABELS: Record<string, string> = {
   Franko1901: "Франко 1901",
@@ -57,6 +59,24 @@ function debounce(fn: () => void, ms: number) {
   return () => { clearTimeout(t); t = setTimeout(fn, ms) as unknown as number; };
 }
 
+function loadSaved(): string[] {
+  try { const v = JSON.parse(localStorage.getItem("verba:saved") || "[]"); return Array.isArray(v) ? v : []; } catch { return []; }
+}
+function persistSaved() { try { localStorage.setItem("verba:saved", JSON.stringify(saved)); } catch {} }
+function isSavedId(id: string): boolean { return saved.includes(id); }
+function setSaved(id: string) {
+  saved = toggleSaved(saved, id); persistSaved(); updateSavedCount();
+  if (savedView) renderSavedView();
+}
+function updateSavedCount() {
+  const b = $("savedBtn"); if (b) b.textContent = `♥ Збережені (${saved.length})`;
+}
+function renderSavedView() {
+  const items = saved.map((id) => byId.get(id)).filter(Boolean) as Proverb[];
+  $("count").textContent = `Збережено ${fmt(items.length)}`;
+  showResults(items, "Збережені", false);
+}
+
 async function boot() {
   const [proverbs, metaData] = await Promise.all([
     fetch("/data/proverbs.json").then((r) => r.json()),
@@ -76,7 +96,7 @@ async function boot() {
   renderHero();
   renderResults();
 
-  $<HTMLInputElement>("q").addEventListener("input", debounce(renderResults, 180));
+  $<HTMLInputElement>("q").addEventListener("input", debounce(() => { savedView = false; $("savedBtn").classList.remove("active"); renderResults(); }, 180));
 
   const semBtn = $("semToggle") as HTMLButtonElement;
   const syncOnline = () => { if (!navigator.onLine) { semanticMode = false; semBtn.setAttribute("aria-checked", "false"); } semBtn.disabled = !navigator.onLine; };
@@ -88,6 +108,13 @@ async function boot() {
     semanticMode = !semanticMode;
     semBtn.setAttribute("aria-checked", String(semanticMode));
     renderResults();
+  });
+
+  updateSavedCount();
+  $("savedBtn").addEventListener("click", () => {
+    savedView = !savedView;
+    $("savedBtn").classList.toggle("active", savedView);
+    if (savedView) renderSavedView(); else renderResults();
   });
 
   if ("serviceWorker" in navigator) navigator.serviceWorker.register("/sw.js");
@@ -127,6 +154,7 @@ function renderFilters() {
         c.classList.toggle("active", (c.dataset.cat !== undefined && c.dataset.cat === activeCat) || (c.dataset.src !== undefined && c.dataset.src === activeSource));
       }
       $("themeActive").textContent = activeCat ? "· " + catLabel(activeCat) : "";
+      savedView = false; $("savedBtn").classList.remove("active");
       renderResults();
     });
   }
@@ -199,12 +227,16 @@ function renderPage() {
           <div class="entry-tags">
             ${p.category.map((c) => `<span class="tag">${esc(catLabel(c))}</span>`).join("")}
             <span class="tag-src">${esc(p.sources.map(srcLabel).join(" · "))}</span>
+            <button class="entry-save${isSavedId(p.id) ? " on" : ""}" type="button" data-save="${esc(p.id)}" aria-label="Зберегти" aria-pressed="${isSavedId(p.id)}">♥</button>
           </div>
         </div>
       </article>`).join("") +
     (more ? `<button id="moreBtn" class="more-btn" type="button">Показати ще</button>` : "");
   for (const el of Array.from(document.querySelectorAll<HTMLElement>(".entry"))) {
     el.addEventListener("click", () => { const p = byId.get(el.dataset.id!); if (p) openDetail(p); });
+  }
+  for (const b of Array.from(document.querySelectorAll<HTMLElement>(".entry-save"))) {
+    b.addEventListener("click", (e) => { e.stopPropagation(); setSaved(b.dataset.save!); b.classList.toggle("on"); b.setAttribute("aria-pressed", String(isSavedId(b.dataset.save!))); if (savedView) renderSavedView(); });
   }
   const moreBtn = $("moreBtn") as HTMLButtonElement | null;
   if (moreBtn) moreBtn.addEventListener("click", () => { shown = nextShown(shown, STEP, pageResults.length); renderPage(); });
