@@ -5,7 +5,7 @@
 > Each entry carries a modern-spelling rendering and 1–3 thematic categories; ~30,500 include scholarly
 > explanations. Free and public, with a searchable web app and a multi-format REST API.
 
-Base URL: https://ukr-proverbs-corpus.miwaniza.workers.dev
+Base URL: https://verbacorpus.org
 
 ## What it is
 
@@ -31,15 +31,15 @@ Collections return `{total, limit, offset, results}`; CORS is open (`Access-Cont
 
 ## Docs
 
-- OpenAPI 3 spec: https://ukr-proverbs-corpus.miwaniza.workers.dev/api/v1/openapi.json
-- Human docs + curl examples: https://ukr-proverbs-corpus.miwaniza.workers.dev/api.html
-- Source code & data: https://github.com/MurzikVasilyevich/ukr-proverbs-corpus
+- OpenAPI 3 spec: https://verbacorpus.org/api/v1/openapi.json
+- Human docs + curl examples: https://verbacorpus.org/api.html
+- Source code & data: https://github.com/MurzikVasilyevich/verbacorpus
 
 ## Examples
 
-- `curl 'https://ukr-proverbs-corpus.miwaniza.workers.dev/api/v1/search?q=гроші&format=json'`
-- `curl 'https://ukr-proverbs-corpus.miwaniza.workers.dev/api/v1/random?n=1'`
-- `curl 'https://ukr-proverbs-corpus.miwaniza.workers.dev/api/v1/export?format=jsonl'`
+- `curl 'https://verbacorpus.org/api/v1/search?q=гроші&format=json'`
+- `curl 'https://verbacorpus.org/api/v1/random?n=1'`
+- `curl 'https://verbacorpus.org/api/v1/export?format=jsonl'`
 
 ## Notes
 

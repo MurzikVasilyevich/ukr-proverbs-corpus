@@ -53,7 +53,7 @@
   <main class="wrap" style="padding-block: 1.4rem 4rem;">
 
     <p class="api-intro">
-      Базовий шлях: <code style="font-family:var(--mono);font-size:.9em;background:var(--paper-2);border:1px solid var(--rule);border-radius:2px;padding:.05rem .3rem;">https://ukr-proverbs-corpus.miwaniza.workers.dev/api/v1</code>.
+      Базовий шлях: <code style="font-family:var(--mono);font-size:.9em;background:var(--paper-2);border:1px solid var(--rule);border-radius:2px;padding:.05rem .3rem;">https://verbacorpus.org/api/v1</code>.
       Усі ендпоінти публічні, CORS відкрито (<code style="font-family:var(--mono);font-size:.9em;background:var(--paper-2);border:1px solid var(--rule);border-radius:2px;padding:.05rem .3rem;">*</code>), без ключа.
     </p>
 
@@ -99,10 +99,10 @@
         </table>
         <div class="curl-block">
           <p class="curl-label">Приклади</p>
-          <pre class="curl-example">curl 'https://ukr-proverbs-corpus.miwaniza.workers.dev/api/v1/search?q=гроші&format=csv'</pre>
-          <pre class="curl-example" style="margin-top:.5rem">curl 'https://ukr-proverbs-corpus.miwaniza.workers.dev/api/v1/search?q=праця&source=Franko1901&limit=10'</pre>
+          <pre class="curl-example">curl 'https://verbacorpus.org/api/v1/search?q=гроші&format=csv'</pre>
+          <pre class="curl-example" style="margin-top:.5rem">curl 'https://verbacorpus.org/api/v1/search?q=праця&source=Franko1901&limit=10'</pre>
           <pre class="curl-example" style="margin-top:.5rem">curl -H 'Accept: application/x-ndjson' \
-  'https://ukr-proverbs-corpus.miwaniza.workers.dev/api/v1/search?q=вода'</pre>
+  'https://verbacorpus.org/api/v1/search?q=вода'</pre>
         </div>
       </div>
 
@@ -126,8 +126,8 @@
         </table>
         <div class="curl-block">
           <p class="curl-label">Приклад</p>
-          <pre class="curl-example">curl 'https://ukr-proverbs-corpus.miwaniza.workers.dev/api/v1/semantic?q=важка+праця+приносить+плоди'</pre>
-          <pre class="curl-example" style="margin-top:.5rem">curl 'https://ukr-proverbs-corpus.miwaniza.workers.dev/api/v1/semantic?q=дружба&minScore=0.5&format=tsv'</pre>
+          <pre class="curl-example">curl 'https://verbacorpus.org/api/v1/semantic?q=важка+праця+приносить+плоди'</pre>
+          <pre class="curl-example" style="margin-top:.5rem">curl 'https://verbacorpus.org/api/v1/semantic?q=дружба&minScore=0.5&format=tsv'</pre>
         </div>
       </div>
     </section>
@@ -155,8 +155,8 @@
         </table>
         <div class="curl-block">
           <p class="curl-label">Приклади</p>
-          <pre class="curl-example">curl 'https://ukr-proverbs-corpus.miwaniza.workers.dev/api/v1/random?n=3'</pre>
-          <pre class="curl-example" style="margin-top:.5rem">curl 'https://ukr-proverbs-corpus.miwaniza.workers.dev/api/v1/random?n=5&category=family&format=xml'</pre>
+          <pre class="curl-example">curl 'https://verbacorpus.org/api/v1/random?n=3'</pre>
+          <pre class="curl-example" style="margin-top:.5rem">curl 'https://verbacorpus.org/api/v1/random?n=5&category=family&format=xml'</pre>
         </div>
       </div>
 
@@ -181,8 +181,8 @@
         </table>
         <div class="curl-block">
           <p class="curl-label">Приклади</p>
-          <pre class="curl-example">curl 'https://ukr-proverbs-corpus.miwaniza.workers.dev/api/v1/query?source=Franko1901&limit=20'</pre>
-          <pre class="curl-example" style="margin-top:.5rem">curl 'https://ukr-proverbs-corpus.miwaniza.workers.dev/api/v1/query?has_explanation=true&format=tsv'</pre>
+          <pre class="curl-example">curl 'https://verbacorpus.org/api/v1/query?source=Franko1901&limit=20'</pre>
+          <pre class="curl-example" style="margin-top:.5rem">curl 'https://verbacorpus.org/api/v1/query?has_explanation=true&format=tsv'</pre>
         </div>
       </div>
 
@@ -202,8 +202,8 @@
         </table>
         <div class="curl-block">
           <p class="curl-label">Приклади</p>
-          <pre class="curl-example">curl 'https://ukr-proverbs-corpus.miwaniza.workers.dev/api/v1/proverb/p000001'</pre>
-          <pre class="curl-example" style="margin-top:.5rem">curl 'https://ukr-proverbs-corpus.miwaniza.workers.dev/api/v1/proverb/p000001?format=xml'</pre>
+          <pre class="curl-example">curl 'https://verbacorpus.org/api/v1/proverb/p000001'</pre>
+          <pre class="curl-example" style="margin-top:.5rem">curl 'https://verbacorpus.org/api/v1/proverb/p000001?format=xml'</pre>
         </div>
       </div>
 
@@ -225,9 +225,9 @@
         <div class="curl-block">
           <p class="curl-label">Приклади</p>
           <pre class="curl-example">curl -H 'Accept: application/x-ndjson' \
-  'https://ukr-proverbs-corpus.miwaniza.workers.dev/api/v1/export' > proverbs.ndjson</pre>
-          <pre class="curl-example" style="margin-top:.5rem">curl 'https://ukr-proverbs-corpus.miwaniza.workers.dev/api/v1/export?format=csv' > proverbs.csv</pre>
-          <pre class="curl-example" style="margin-top:.5rem">curl 'https://ukr-proverbs-corpus.miwaniza.workers.dev/api/v1/export?source=Franko1901&format=tsv'</pre>
+  'https://verbacorpus.org/api/v1/export' > proverbs.ndjson</pre>
+          <pre class="curl-example" style="margin-top:.5rem">curl 'https://verbacorpus.org/api/v1/export?format=csv' > proverbs.csv</pre>
+          <pre class="curl-example" style="margin-top:.5rem">curl 'https://verbacorpus.org/api/v1/export?source=Franko1901&format=tsv'</pre>
         </div>
       </div>
     </section>
@@ -246,7 +246,7 @@
         <p class="ep-desc">Повертає масив об'єктів <code style="font-family:var(--mono)">{key, label, count}</code> для всіх тематичних категорій.</p>
         <div class="curl-block">
           <p class="curl-label">Приклад</p>
-          <pre class="curl-example">curl 'https://ukr-proverbs-corpus.miwaniza.workers.dev/api/v1/categories'</pre>
+          <pre class="curl-example">curl 'https://verbacorpus.org/api/v1/categories'</pre>
         </div>
       </div>
 
@@ -259,7 +259,7 @@
         <p class="ep-desc">Повна статистика: загальна кількість, розбивка за джерелами та темами, дата збірки.</p>
         <div class="curl-block">
           <p class="curl-label">Приклад</p>
-          <pre class="curl-example">curl 'https://ukr-proverbs-corpus.miwaniza.workers.dev/api/v1/meta'</pre>
+          <pre class="curl-example">curl 'https://verbacorpus.org/api/v1/meta'</pre>
         </div>
       </div>
     </section>
@@ -289,7 +289,7 @@
 
   <footer class="colophon">
     <div class="wrap">
-      <p class="col-note"><a href="/">← Корпус народної мудрості</a> · <a href="/api/v1/openapi.json">OpenAPI JSON</a> · <a href="https://github.com/MurzikVasilyevich/ukr-proverbs-corpus" rel="noopener">GitHub</a></p>
+      <p class="col-note"><a href="/">← Корпус народної мудрості</a> · <a href="/api/v1/openapi.json">OpenAPI JSON</a> · <a href="https://github.com/MurzikVasilyevich/verbacorpus" rel="noopener">GitHub</a></p>
     </div>
   </footer>
 </body>

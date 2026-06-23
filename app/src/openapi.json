@@ -7,7 +7,7 @@
     "license": { "name": "CC0-1.0", "url": "https://creativecommons.org/publicdomain/zero/1.0/" }
   },
   "servers": [
-    { "url": "https://ukr-proverbs-corpus.miwaniza.workers.dev", "description": "Production" }
+    { "url": "https://verbacorpus.org", "description": "Production" }
   ],
   "tags": [
     { "name": "search", "description": "Full-text and semantic search" },

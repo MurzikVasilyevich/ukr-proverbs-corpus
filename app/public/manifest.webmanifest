@@ -1,9 +1,9 @@
 {
-  "name": "Українські прислів'я та приказки",
-  "short_name": "Прислів'я",
+  "name": "verba — українські прислів'я та приказки",
+  "short_name": "verba",
   "start_url": "/",
   "display": "standalone",
-  "background_color": "#ffffff",
-  "theme_color": "#2563eb",
+  "background_color": "#f4f1e8",
+  "theme_color": "#5e7355",
   "icons": [{ "src": "/icons/icon.svg", "sizes": "any", "type": "image/svg+xml" }]
 }

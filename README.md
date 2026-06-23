@@ -8,12 +8,12 @@ It is **enriched**: every entry carries a modern-spelling rendering and 1–3 th
 ## Web app & API
 
 A Cloudflare Worker serves a searchable, offline-capable PWA and a JSON REST API over the corpus
-(in `app/`, mirroring the ua-bez-tabu stack). Live: **https://ukr-proverbs-corpus.miwaniza.workers.dev**
+(in `app/`, mirroring the ua-bez-tabu stack). Live: **https://verbacorpus.org**
 
 ### REST API (`/api/v1`, multi-format)
 
 Versioned, content-negotiated API — every data endpoint serves **JSON · JSONL · XML · CSV · TSV** via
-`?format=` (default `json`) or the `Accept` header. Docs + curl examples at **[/api.html](https://ukr-proverbs-corpus.miwaniza.workers.dev/api.html)**; OpenAPI 3 at `/api/v1/openapi.json`.
+`?format=` (default `json`) or the `Accept` header. Docs + curl examples at **[/api.html](https://verbacorpus.org/api.html)**; OpenAPI 3 at `/api/v1/openapi.json`.
 
 - `GET /api/v1/search?q=&category=&source=&limit=&offset=&format=` — lexical
 - `GET /api/v1/semantic?q=&category=&source=&minScore=&limit=&format=` — meaning-based (see below)
@@ -26,8 +26,8 @@ Versioned, content-negotiated API — every data endpoint serves **JSON · JSONL
 Collections return `{total, limit, offset, results}` (+ `X-Total-Count`); file formats download with a filename.
 The unversioned `/api/*` paths remain as back-compatible aliases. Example:
 ```bash
-curl 'https://ukr-proverbs-corpus.miwaniza.workers.dev/api/v1/search?q=гроші&format=csv'
-curl -H 'Accept: application/x-ndjson' 'https://ukr-proverbs-corpus.miwaniza.workers.dev/api/v1/export'
+curl 'https://verbacorpus.org/api/v1/search?q=гроші&format=csv'
+curl -H 'Accept: application/x-ndjson' 'https://verbacorpus.org/api/v1/export'
 ```
 
 ### Semantic search (embeddings + Vectorize)
