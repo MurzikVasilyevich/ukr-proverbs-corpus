@@ -2,7 +2,7 @@ import { ImageResponse } from "workers-og";
 import ptSerif from "./fonts/PTSerif-Regular.ttf";
 import { escapeHtml, type CardModel } from "./shared/meta";
 
-const FONT = (ptSerif as unknown as Uint8Array).buffer as ArrayBuffer;
+const FONT = ptSerif as unknown as ArrayBuffer;
 
 export function renderCard(m: CardModel): Response {
   const e = escapeHtml;

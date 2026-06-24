@@ -17,5 +17,6 @@
   "routes": [
     { "pattern": "verbacorpus.org", "custom_domain": true },
     { "pattern": "www.verbacorpus.org", "custom_domain": true }
-  ]
+  ],
+  "rules": [{ "type": "Data", "globs": ["**/*.ttf"], "fallthrough": true }]
 }
