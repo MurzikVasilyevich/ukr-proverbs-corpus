@@ -69,7 +69,7 @@ export default {
         const pm = raw0.match(/^\/p\/(.+)$/);
         if (pm) {
           const p = byId.get(decodeURIComponent(pm[1]));
-          if (!p) return HTML(`<!DOCTYPE html><html lang="uk"><head><meta charset="utf-8"><link rel="stylesheet" href="/styles.css"></head><body><main class="wrap"><p class="empty">Прислів'я не знайдено. <a href="/">На головну</a></p></main></body></html>`, 404);
+          if (!p) return HTML(`<!DOCTYPE html><html lang="uk"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width, initial-scale=1"><title>Не знайдено — verba</title><link rel="stylesheet" href="/styles.css"></head><body><main class="wrap" style="padding-block:4rem;"><p class="empty">Прислів'я не знайдено. <a href="/">На головну</a></p></main></body></html>`, 404);
           return HTML(buildProverbPage(p, host));
         }
         const cm = raw0.match(/^\/card\/(.+)\.png$/);
@@ -82,7 +82,7 @@ export default {
             return r;
           };
           if (key === "daily") {
-            const pool = proverbs.filter((p) => /^[А-ЯІЇЄҐ]/.test(p.text.trim()) && p.text.trim().length >= 18 && p.text.trim().length <= 90 && p.text.trim().split(/\s+/).length >= 4);
+            const pool = proverbs.filter((p) => { const t = p.text.trim(); return /^[А-ЯІЇЄҐ]/.test(t) && t.length >= 18 && t.length <= 90 && t.split(/\s+/).length >= 4; });
             const pick = pool[dailyIndex(new Date().toISOString().slice(0, 10), pool.length)] ?? proverbs[0];
             return cacheable(renderCard(cardModel(pick)), 86400);
           }
@@ -90,6 +90,7 @@ export default {
           if (!p) return new Response("not found", { status: 404, headers: { "access-control-allow-origin": "*" } });
           return cacheable(renderCard(cardModel(p)), 31536000);
         }
+        return new Response("not found", { status: 404, headers: { "access-control-allow-origin": "*" } });
       }
       const raw = raw0;
       if (!raw.startsWith("/api/")) return env.ASSETS.fetch(request);
