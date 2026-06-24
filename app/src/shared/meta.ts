@@ -31,7 +31,7 @@ export function buildProverbPage(p: Proverb, host: string): string {
   const pm = p.modern_text && p.modern_text.trim() !== p.text.trim() ? prettify(p.modern_text) : "";
   const img = `https://${e(host)}/card/${e(p.id)}.png`;
   const canon = `https://${e(host)}/p/${e(p.id)}`;
-  const desc = [pm || p.modern_text, p.sources.join(", "), p.category.join(", ")].filter(Boolean).join(" — ");
+  const desc = [prettify(p.modern_text), p.sources.join(", "), p.category.join(", ")].filter(Boolean).join(" — ");
   const tags = p.category.map((c) => `<span class="tag">${e(c)}</span>`).join("");
   return `<!DOCTYPE html>
 <html lang="uk">
