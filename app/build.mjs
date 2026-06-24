@@ -7,5 +7,6 @@ await build({
   bundle: true, minify: true, sourcemap: true,
   format: "esm", target: ["es2022"],
   outfile: "public/app.js",
+  loader: { ".ttf": "binary" },
 });
 console.log("Built public/app.js");

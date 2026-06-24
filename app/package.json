@@ -10,7 +10,10 @@
     "deploy": "wrangler deploy",
     "test": "vitest run"
   },
-  "dependencies": { "minisearch": "^7.1.0" },
+  "dependencies": {
+    "minisearch": "^7.1.0",
+    "workers-og": "^0.0.27"
+  },
   "devDependencies": {
     "@cloudflare/vitest-pool-workers": "^0.9.6",
     "esbuild": "^0.25.10",
