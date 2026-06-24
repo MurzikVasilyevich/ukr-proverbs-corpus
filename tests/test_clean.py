@@ -13,6 +13,12 @@ def test_clean_text_preserves_quotes_archaic_and_clean():
     assert clean_text("Без труда нема плода.") == "Без труда нема плода."
     assert clean_text(clean_text("' По парі.")) == clean_text("' По парі.")  # idempotent
 
+def test_clean_text_strips_leading_dash():
+    assert clean_text("- В невмілого руки не болять.") == "В невмілого руки не болять."
+    assert clean_text("- всякий труд почесний.") == "Всякий труд почесний."
+    assert clean_text("будь-що") == "Будь-що"            # word hyphen untouched, first letter capped
+    assert clean_text("по-нашому добре.") == "По-нашому добре."  # leading word recapped, hyphen kept
+
 def test_to_plain_canonicalizes_punct():
     assert to_plain("«А?» — «Б!»") == '"А?" - "Б!"'
     assert to_plain('„цитата"') == '"цитата"'
