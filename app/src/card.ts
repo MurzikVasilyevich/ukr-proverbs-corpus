@@ -1,11 +1,14 @@
 import { ImageResponse } from "workers-og";
 import ptSerif from "./fonts/PTSerif-Regular.ttf";
-import { escapeHtml, type CardModel } from "./shared/meta";
+import { type CardModel } from "./shared/meta";
 
 const FONT = ptSerif as unknown as ArrayBuffer;
 
+// satori/workers-og renders text literally and does NOT decode HTML entities,
+// so escape only the structural chars; leave quotes/apostrophes as-is.
+const e = (s: string) => s.replace(/[&<>]/g, (c) => ({ "&": "&amp;", "<": "&lt;", ">": "&gt;" }[c]!));
+
 export function renderCard(m: CardModel): Response {
-  const e = escapeHtml;
   const modern = m.modern
     ? `<div style="font-size:34px;font-style:italic;color:#6f6a5c;margin-top:20px;display:flex;">${e(m.modern)}</div>`
     : "";
