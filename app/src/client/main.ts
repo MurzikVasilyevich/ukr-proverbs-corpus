@@ -60,7 +60,7 @@ function debounce(fn: () => void, ms: number) {
 }
 
 async function share(p: Proverb) {
-  const url = location.origin;
+  const url = `${location.origin}/p/${p.id}`;
   if (navigator.share) { try { await navigator.share({ title: "Українське прислів'я", text: p.text, url }); } catch {} return; }
   try { await navigator.clipboard.writeText(`${p.text} — ${url}`); flash("Скопійовано ✓"); }
   catch { window.open(url, "_blank"); }
@@ -363,7 +363,7 @@ async function openDetail(p: Proverb) {
       ${expl ? `<div class="detail-expl">${esc(expl)}</div>` : ""}
       ${variants.length ? `<div class="detail-variants"><h4>Варіанти</h4><ul>${variants.map((v) => `<li>${esc(v.text)}</li>`).join("")}</ul></div>` : ""}
       <div class="detail-meta">${p.category.map((c) => `<span class="tag">${esc(catLabel(c))}</span>`).join("")}<span>${cite}</span></div>
-      <div class="detail-share"><button class="detail-sharebtn" type="button">Поділитися</button></div>
+      <div class="detail-share"><button class="detail-sharebtn" type="button">Поділитися</button><a class="detail-cardbtn" href="/card/${esc(p.id)}.png" target="_blank" rel="noopener">Картка</a></div>
       <button class="detail-close" type="submit" value="close">Закрити</button>
     </form>`;
 

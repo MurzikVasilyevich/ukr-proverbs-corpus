@@ -254,10 +254,12 @@ body.swipe-open { overflow: hidden; }
 .sw-save { color: #b4543f; } .sw-savebtn.on { color: #fff; background: var(--willow); border-color: var(--willow); }
 .sw-share { color: var(--willow); }
 .sw-hint { font-family: var(--sans); font-size: .74rem; color: var(--faint); margin: 0; }
-.detail-share { margin-top: 1.2rem; }
+.detail-share { margin-top: 1.2rem; display: flex; gap: .6rem; flex-wrap: wrap; }
 .detail-sharebtn { font-family: var(--sans); font-size: .82rem; cursor: pointer; background: none; border: 1px solid var(--willow);
   color: var(--willow); border-radius: 999px; padding: .45rem 1.1rem; }
 .detail-sharebtn:hover { background: var(--willow); color: #fff; }
+.detail-cardbtn { font-family: var(--sans); font-size: .82rem; cursor: pointer; background: none; border: 1px solid var(--willow); color: var(--willow); border-radius: 999px; padding: .45rem 1.1rem; text-decoration: none; }
+.detail-cardbtn:hover { background: var(--willow); color: #fff; }
 .flash { position: fixed; bottom: 1.4rem; left: 50%; transform: translateX(-50%) translateY(1rem); z-index: 60;
   background: var(--ink); color: var(--paper); font-family: var(--sans); font-size: .82rem; padding: .55rem 1.1rem;
   border-radius: 999px; opacity: 0; pointer-events: none; transition: opacity .2s, transform .2s; }
