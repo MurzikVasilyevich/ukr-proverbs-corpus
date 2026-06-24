@@ -5,8 +5,8 @@ import unicodedata
 _LIST_NUM = re.compile(r"^\(?\d+[.)]?\s+")          # "1 ", "1. ", "(1) ", "(1 "
 _LEAD_JUNK = re.compile(r"^[\s|.:,!/'()]+")          # stray leading punct/space (NOT « „ " or letters)
 _LOWER_UA = re.compile(r"[а-яіїєґ]")
-_QUOTES = {"«": '"', "»": '"', "„": '"', """: '"', """: '"', "‹": '"', "›": '"'}
-_APOS = "'ʼ`´'"                        # ' ʼ ` ´ '  -> '
+_QUOTES = {"«": '"', "»": '"', "„": '"', "“": '"', "”": '"', "‹": '"', "›": '"'}
+_APOS = "'ʼ`´’"  # ' ʼ ` ´ ’  -> '
 _WS = re.compile(r"\s+")
 
 def clean_text(text: str) -> str:

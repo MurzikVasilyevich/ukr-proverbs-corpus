@@ -16,11 +16,20 @@ def test_clean_text_preserves_quotes_archaic_and_clean():
 def test_to_plain_canonicalizes_punct():
     assert to_plain("«А?» — «Б!»") == '"А?" - "Б!"'
     assert to_plain('„цитата"') == '"цитата"'
-    assert to_plain("нап'є") == "нап'є"        # U+2019 -> U+0027
+    assert to_plain("нап’є") == "нап'є"        # U+2019 -> U+0027
     assert to_plain("будь-що") == "будь-що"          # word hyphen unchanged
     assert to_plain("ой…") == "ой..."
     assert to_plain(to_plain("«А?» — «Б!»")) == to_plain("«А?» — «Б!»")  # idempotent
 
+def test_to_plain_folds_typographic_to_ascii():
+    assert to_plain("“А”") == '"А"'           # curly double-quotes -> "
+    assert to_plain("„Б”") == '"Б"'
+    assert to_plain("нап’є") == "нап'є"   # U+2019 -> U+0027
+    # no typographic punctuation survives
+    out = to_plain("«А» — “Б”… нап’є")
+    assert not any(ch in out for ch in "«»„“”‘’–—…")
+
 def test_to_plain_is_normalized_text_invariant():
-    for s in ["«А?» — «Б!»", "нап'є", "Не плюй у криницю — згодиться.", "„цит\""]:
+    for s in ["«А?» — «Б!»", "нап’є", "Не плюй у криницю — згодиться.", "„цит\"",
+              "“цит”", "нап’є"]:
         assert normalize(to_plain(s)) == normalize(s)
