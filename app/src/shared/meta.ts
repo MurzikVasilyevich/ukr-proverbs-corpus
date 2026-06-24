@@ -25,8 +25,8 @@ export function dailyIndex(dateStr: string, poolLen: number): number {
 
 export function buildProverbPage(p: Proverb, host: string): string {
   const e = escapeHtml;
-  const img = `https://${host}/card/${p.id}.png`;
-  const canon = `https://${host}/p/${p.id}`;
+  const img = `https://${e(host)}/card/${e(p.id)}.png`;
+  const canon = `https://${e(host)}/p/${e(p.id)}`;
   const desc = [p.modern_text, p.sources.join(", "), p.category.join(", ")].filter(Boolean).join(" — ");
   const tags = p.category.map((c) => `<span class="tag">${e(c)}</span>`).join("");
   return `<!DOCTYPE html>
@@ -57,7 +57,7 @@ export function buildProverbPage(p: Proverb, host: string): string {
 <p class="hero-text" style="margin:0;">${e(p.text)}</p>
 ${p.modern_text && p.modern_text.trim() !== p.text.trim() ? `<p class="hero-modern">${e(p.modern_text)}</p>` : ""}
 <p style="margin-top:1rem;">${tags} <span class="tag-src">${e(p.sources.join(" · "))}</span></p>
-<p><img src="/card/${p.id}.png" alt="" style="max-width:100%;height:auto;border:1px solid var(--rule);border-radius:6px;margin-top:1rem;" /></p>
+<p><img src="/card/${e(p.id)}.png" alt="" style="max-width:100%;height:auto;border:1px solid var(--rule);border-radius:6px;margin-top:1rem;" /></p>
 <p style="margin-top:1.5rem;"><a href="/">Переглянути весь корпус</a> · <a href="/api.html">API</a></p>
 </main>
 </body>

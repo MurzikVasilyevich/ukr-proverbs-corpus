@@ -30,6 +30,7 @@ describe("buildProverbPage", () => {
     expect(html).toContain('<meta property="og:image" content="https://example.com/card/p000123.png"');
     expect(html).toContain('<meta name="twitter:card" content="summary_large_image"');
     expect(html).toContain('https://example.com/p/p000123');
+    expect(html).toContain("a&lt;b");
   });
 });
 describe("dailyIndex", () => {
