@@ -6,7 +6,7 @@ def test_classify():
     assert classify('"А?"') == "quote"
     assert classify("Ѣсти.") == "yat"
     assert classify("старі люде.") == "lower"
-    assert classify("Toto має.") == "latin"      # leading Latin T
+    assert classify("Tото має.") == "latin"      # OCR homoglyph: Latin T + Cyrillic ото
     assert classify("1 старі.") == "digit"
     assert classify("| якесь.") == "punct"
     assert classify("") == "empty"

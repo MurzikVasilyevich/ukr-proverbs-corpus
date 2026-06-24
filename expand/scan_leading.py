@@ -12,7 +12,7 @@ def classify(text: str) -> str:
         return "upper"
     if re.match(r"[а-яіїєґ]", c):
         return "lower"
-    if c in '«»"„""':
+    if c in "«»\"„“”":
         return "quote"
     if c.isdigit():
         return "digit"
@@ -28,7 +28,8 @@ def scan(rows: list[dict]) -> dict[str, list[dict]]:
 
 def main() -> None:
     path = sys.argv[1] if len(sys.argv) > 1 else "corpus.csv"
-    rows = list(csv.DictReader(open(path, encoding="utf-8")))
+    with open(path, encoding="utf-8") as f:
+        rows = list(csv.DictReader(f))
     groups = scan(rows)
     for k in sorted(groups, key=lambda k: -len(groups[k])):
         print(f"{k}: {len(groups[k])}")
