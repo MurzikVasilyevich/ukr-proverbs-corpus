@@ -2,6 +2,8 @@ import { searchProverbs, randomProverb, queryProverbs, type Proverb } from "./sh
 import { mapMatches, type Match } from "./shared/semantic";
 import { negotiate, serialize, type Format, type Rec } from "./shared/serialize";
 import openapiDoc from "./openapi.json";
+import { buildProverbPage, cardModel, dailyIndex } from "./shared/meta";
+import { renderCard } from "./card";
 
 interface Env {
   ASSETS: { fetch: (req: Request | string) => Promise<Response> };
@@ -56,7 +58,40 @@ export default {
   async fetch(request: Request, env: Env): Promise<Response> {
     try {
       const url = new URL(request.url);
-      const raw = url.pathname;
+      const raw0 = url.pathname;
+      // social-card routes (need the corpus)
+      if (raw0.startsWith("/p/") || raw0.startsWith("/card/")) {
+        const { proverbs, byId } = await load(env);
+        const host = url.host;
+        const HTML = (body: string, status = 200) =>
+          new Response(body, { status, headers: { "content-type": "text/html; charset=utf-8", "access-control-allow-origin": "*" } });
+
+        const pm = raw0.match(/^\/p\/(.+)$/);
+        if (pm) {
+          const p = byId.get(decodeURIComponent(pm[1]));
+          if (!p) return HTML(`<!DOCTYPE html><html lang="uk"><head><meta charset="utf-8"><link rel="stylesheet" href="/styles.css"></head><body><main class="wrap"><p class="empty">Прислів'я не знайдено. <a href="/">На головну</a></p></main></body></html>`, 404);
+          return HTML(buildProverbPage(p, host));
+        }
+        const cm = raw0.match(/^\/card\/(.+)\.png$/);
+        if (cm) {
+          const key = decodeURIComponent(cm[1]);
+          const cacheable = (resp: Response, maxAge: number) => {
+            const r = new Response(resp.body, resp);
+            r.headers.set("cache-control", `public, max-age=${maxAge}${maxAge > 86400 ? ", immutable" : ""}`);
+            r.headers.set("access-control-allow-origin", "*");
+            return r;
+          };
+          if (key === "daily") {
+            const pool = proverbs.filter((p) => /^[А-ЯІЇЄҐ]/.test(p.text.trim()) && p.text.trim().length >= 18 && p.text.trim().length <= 90 && p.text.trim().split(/\s+/).length >= 4);
+            const pick = pool[dailyIndex(new Date().toISOString().slice(0, 10), pool.length)] ?? proverbs[0];
+            return cacheable(renderCard(cardModel(pick)), 86400);
+          }
+          const p = byId.get(key);
+          if (!p) return new Response("not found", { status: 404, headers: { "access-control-allow-origin": "*" } });
+          return cacheable(renderCard(cardModel(p)), 31536000);
+        }
+      }
+      const raw = raw0;
       if (!raw.startsWith("/api/")) return env.ASSETS.fetch(request);
       // strip optional /v1 -> reuse canonical handlers; aliases keep working
       const path = raw.startsWith("/api/v1/") ? "/api/" + raw.slice("/api/v1/".length) : (raw === "/api/v1" ? "/api" : raw);
