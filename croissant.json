@@ -34,7 +34,7 @@
       "@id": "corpus.csv",
       "name": "corpus.csv",
       "description": "The full corpus as CSV (one row per proverb, 10 columns).",
-      "contentUrl": "https://github.com/MurzikVasilyevich/verbacorpus/releases/download/v1.0.0/corpus.csv",
+      "contentUrl": "https://github.com/dmytro-yemelianov/verbacorpus/releases/download/v1.0.0/corpus.csv",
       "encodingFormat": "text/csv",
       "sha256": "PLACEHOLDER_SHA256"
     }

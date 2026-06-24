@@ -3,7 +3,7 @@
 **Date:** 2026-06-24
 **Status:** Approved (design)
 **Sub-project:** 10 — version the corpus, publish citable GitHub Releases with a data card, and surface the version on the site
-**Repo:** `verbacorpus` (MurzikVasilyevich/verbacorpus, + dmytro mirror); changes to repo root, `app/`
+**Repo:** `verbacorpus` (dmytro-yemelianov/verbacorpus, + dmytro mirror); changes to repo root, `app/`
 **Depends on:** the live corpus (48,787 entries, 5 sources) + the build pipeline (`build.py` → `corpus.{csv,json,xml}`; `app/build_data.py` → `app/public/data/*.json`).
 
 ---
@@ -34,11 +34,11 @@ Give the corpus a real **release identity**: a single version source-of-truth, *
 
 - **`scripts/release.sh`** (bash): reads `VERSION`; asserts `CITATION.cff`/`croissant.json` versions match; (re)generates `corpus.jsonl` from `corpus.json`; assembles a staging dir with `corpus.csv`, `corpus.json`, `corpus.jsonl`, `corpus.xml`, `DATACARD.md`, `croissant.json`; zips it to `verba-corpus-v<VERSION>.zip`; computes sha256s; prints the planned `gh release create` command and the asset list. By default it **stops before publishing** (prints the command); with `--publish` it runs `gh release create v<VERSION> --title "verba corpus v<VERSION>" --notes-file <notes> <zip> corpus.csv corpus.json croissant.json DATACARD.md`. Publishing is **outward — the controller runs `--publish` only after user confirmation**, on the MurzikVasilyevich account (the public repo).
 - **Release notes** (generated from CHANGELOG's top entry): headline stats, per-source counts, formats included, links to the live site + API + data card, and the licensing note.
-- The release is created on `MurzikVasilyevich/verbacorpus`. (The dmytro mirror is a private backup; no release needed there.)
+- The release is created on `dmytro-yemelianov/verbacorpus`. (The dmytro mirror is a private backup; no release needed there.)
 
 ## 5. Site version display
 
-- The colophon (`renderColophon` in `app/src/client/main.ts`) shows the version: append **«· версія vX.Y.Z»** to the stat line, linked to `https://github.com/MurzikVasilyevich/verbacorpus/releases/tag/vX.Y.Z`. Rendered only when `meta.version` is present (graceful if absent). A new `#colVersion` span (or appended to `#colStat`). Themed, keyboard-focusable link.
+- The colophon (`renderColophon` in `app/src/client/main.ts`) shows the version: append **«· версія vX.Y.Z»** to the stat line, linked to `https://github.com/dmytro-yemelianov/verbacorpus/releases/tag/vX.Y.Z`. Rendered only when `meta.version` is present (graceful if absent). A new `#colVersion` span (or appended to `#colStat`). Themed, keyboard-focusable link.
 
 ## 6. Licensing statement (DATACARD / CITATION / croissant)
 

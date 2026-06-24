@@ -11,7 +11,7 @@
 ## Global Constraints
 
 - **Version = `1.0.0`**, in a root `VERSION` file (bare string, single source of truth). SemVer-for-data: MAJOR=schema/breaking, MINOR=new source/significant additions, PATCH=fixes.
-- Author/attribution: **Dmytro Yemelianov**, ORCID **`0009-0002-9244-7426`** (https://orcid.org/0009-0002-9244-7426). Repo: `MurzikVasilyevich/verbacorpus`; site `https://verbacorpus.org`.
+- Author/attribution: **Dmytro Yemelianov**, ORCID **`0009-0002-9244-7426`** (https://orcid.org/0009-0002-9244-7426). Repo: `dmytro-yemelianov/verbacorpus`; site `https://verbacorpus.org`.
 - **License (confirmed):** compilation + enrichment = **CC BY 4.0**; historical texts (Franko 1901, Nomis 1864, Ilkevich 1841) = public domain; modern collections (Bobkova, Mlodzynskyi 2009) = texts under their publishers' rights, included for research/education, attributed, removed on request. `CITATION.cff`/`croissant.json` `license` = `CC-BY-4.0`; the layered detail lives in DATACARD §Distribution.
 - **Do NOT change `corpus.json`'s structure** — it is a bare JSON array; version lives in `meta.json` / `VERSION` / `croissant.json`, not inside `corpus.json`.
 - Corpus facts (verbatim, for the card/changelog/croissant): **48,787** entries; **30,532** with explanation; **48,787** with modern_text; **5 sources** — Franko1901 30,906 · Nomis1864 9,785 · Bobkova 5,613 · Ilkevich1841 2,702 · Mlodzynskyi2009 2,261; **27** categories; 10-column schema (id, text, normalized_text, modern_text, keyword, explanation, category, sources, source_refs, variant_group). Quality: Nomis OCR best-effort ~75–80%; category audit ~85% acceptable; modern_text ~95%.
@@ -108,7 +108,7 @@ let meta: { version?: string; count: number; taxonomy: Record<string, string>; s
 ```typescript
   if (meta.version) {
     $("colVersion").innerHTML =
-      `Версія даних <a href="https://github.com/MurzikVasilyevich/verbacorpus/releases/tag/v${esc(meta.version)}" rel="noopener">v${esc(meta.version)}</a>`;
+      `Версія даних <a href="https://github.com/dmytro-yemelianov/verbacorpus/releases/tag/v${esc(meta.version)}" rel="noopener">v${esc(meta.version)}</a>`;
   }
 ```
 
@@ -146,7 +146,7 @@ authors:
 version: 1.0.0
 date-released: "2026-06-24"
 url: "https://verbacorpus.org"
-repository-code: "https://github.com/MurzikVasilyevich/verbacorpus"
+repository-code: "https://github.com/dmytro-yemelianov/verbacorpus"
 license: CC-BY-4.0
 keywords:
   - Ukrainian
@@ -196,7 +196,7 @@ keywords:
       "@id": "corpus.csv",
       "name": "corpus.csv",
       "description": "The full corpus as CSV (one row per proverb, 10 columns).",
-      "contentUrl": "https://github.com/MurzikVasilyevich/verbacorpus/releases/download/v1.0.0/corpus.csv",
+      "contentUrl": "https://github.com/dmytro-yemelianov/verbacorpus/releases/download/v1.0.0/corpus.csv",
       "encodingFormat": "text/csv",
       "sha256": "PLACEHOLDER_SHA256"
     }
@@ -250,7 +250,7 @@ Initial public release.
 # Data Card — verba: Ukrainian Proverbs Corpus
 
 **Version:** 1.0.0 · **Released:** 2026-06-24 · **Author:** Dmytro Yemelianov ([ORCID](https://orcid.org/0009-0002-9244-7426))
-**Home:** https://verbacorpus.org · **Repo:** https://github.com/MurzikVasilyevich/verbacorpus
+**Home:** https://verbacorpus.org · **Repo:** https://github.com/dmytro-yemelianov/verbacorpus
 
 ## Motivation
 Why the dataset was created; the gap it fills (a unified, attributed, machine-readable corpus of Ukrainian proverbs); who built/maintains it.
@@ -310,7 +310,7 @@ cd "$(dirname "$0")/.."
 ROOT="$(pwd)"
 VERSION="$(cat VERSION)"
 TAG="v${VERSION}"
-REPO="MurzikVasilyevich/verbacorpus"
+REPO="dmytro-yemelianov/verbacorpus"
 
 # 1. Consistency guard: VERSION must match CITATION.cff + croissant.json
 cff_v="$(grep -E '^version:' CITATION.cff | head -1 | sed -E 's/version:[[:space:]]*//; s/["'\'' ]//g')"

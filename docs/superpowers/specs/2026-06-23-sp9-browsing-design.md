@@ -3,7 +3,7 @@
 **Date:** 2026-06-23
 **Status:** Approved (design)
 **Sub-project:** 9 — browse the corpus past the 80-result cap, plus an immersive swipe/discovery mode with a saved collection
-**Repo:** `verbacorpus` (MurzikVasilyevich/verbacorpus); changes to `app/`
+**Repo:** `verbacorpus` (dmytro-yemelianov/verbacorpus); changes to `app/`
 **Depends on:** the live PWA (SP4–SP7) + the verba brand/dark theme. SP8 social cards remain separate (share upgrades to `/p/:id` when SP8 lands).
 
 ---

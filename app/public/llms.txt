@@ -33,7 +33,7 @@ Collections return `{total, limit, offset, results}`; CORS is open (`Access-Cont
 
 - OpenAPI 3 spec: https://verbacorpus.org/api/v1/openapi.json
 - Human docs + curl examples: https://verbacorpus.org/api.html
-- Source code & data: https://github.com/MurzikVasilyevich/verbacorpus
+- Source code & data: https://github.com/dmytro-yemelianov/verbacorpus
 
 ## Examples
 

@@ -395,7 +395,7 @@ function renderColophon() {
     `${Object.keys(meta.taxonomy).length} ${plural(Object.keys(meta.taxonomy).length, ["тема", "теми", "тем"])}`;
   if (meta.version) {
     $("colVersion").innerHTML =
-      `Версія даних <a href="https://github.com/MurzikVasilyevich/verbacorpus/releases/tag/v${esc(meta.version)}" rel="noopener">v${esc(meta.version)}</a>`;
+      `Версія даних <a href="https://github.com/dmytro-yemelianov/verbacorpus/releases/tag/v${esc(meta.version)}" rel="noopener">v${esc(meta.version)}</a>`;
   }
   $("colSources").innerHTML = meta.sources.map((s) =>
     `<li><b>${esc(s.author || s.key)}</b> — <i>${esc(s.title)}</i>${s.year ? ", " + esc(s.year) : ""}</li>`).join("");

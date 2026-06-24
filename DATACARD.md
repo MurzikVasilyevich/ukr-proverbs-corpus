@@ -1,7 +1,7 @@
 # Data Card — verba: Ukrainian Proverbs Corpus
 
 **Version:** 1.0.1 · **Released:** 2026-06-24 · **Author:** Dmytro Yemelianov ([ORCID](https://orcid.org/0009-0002-9244-7426))
-**Home:** https://verbacorpus.org · **Repo:** https://github.com/MurzikVasilyevich/verbacorpus
+**Home:** https://verbacorpus.org · **Repo:** https://github.com/dmytro-yemelianov/verbacorpus
 
 ---
 
@@ -112,7 +112,7 @@ work_labor, poverty_wealth, food_hunger, drink_alcohol, family_kinship, marriage
 
 ## Distribution
 
-- **GitHub Releases:** CSV, JSON, JSONL, XML assets at https://github.com/MurzikVasilyevich/verbacorpus/releases/tag/v1.0.0 (see `scripts/release.sh` for the build)
+- **GitHub Releases:** CSV, JSON, JSONL, XML assets at https://github.com/dmytro-yemelianov/verbacorpus/releases/tag/v1.0.0 (see `scripts/release.sh` for the build)
 - **REST API:** multi-format (`json`, `jsonl`, `xml`, `csv`, `tsv`) at https://verbacorpus.org/api/v1 — search, filter, export, semantic search; OpenAPI 3 spec at `/api/v1/openapi.json`
 - **Croissant metadata:** [`croissant.json`](croissant.json) at repo root (MLCommons schema.org JSON-LD)
 
@@ -137,7 +137,7 @@ Cite as: Yemelianov, Dmytro (2026). *verba — Ukrainian Proverbs Corpus* (v1.0.
 - `MINOR` — new source added or significant corpus additions
 - `PATCH` — corrections to existing entries, OCR fixes, category corrections
 
-**Reporting issues:** GitHub Issues at https://github.com/MurzikVasilyevich/verbacorpus/issues. Include the entry `id` and the nature of the error (OCR, category, modern_text, variant group).
+**Reporting issues:** GitHub Issues at https://github.com/dmytro-yemelianov/verbacorpus/issues. Include the entry `id` and the nature of the error (OCR, category, modern_text, variant group).
 
 **Update cadence:** as new historical sources are digitized and ingested or as corrections accumulate. The tesseract + LLM pipeline (`expand/`) is reusable for additional archive.org sources.
 
